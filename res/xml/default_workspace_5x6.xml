@@ -14,7 +14,7 @@
      limitations under the License.
 -->
 
-<favorites xmlns:launcher="http://schemas.android.com/apk/res-auto/com.android.launcher3">
+<favorites xmlns:launcher="http://schemas.android.com/apk/res-auto/io.github.runassudo.launchert">
     <!-- Far-left screen [0] -->
 
     <!-- Left screen [1] -->
@@ -45,8 +45,8 @@
 
     <!-- Right screen [3] -->
     <favorite
-        launcher:packageName="com.android.gallery3d"
-        launcher:className="com.android.gallery3d.app.Gallery"
+        launcher:packageName="io.github.runassudo.launchert.gallery3d"
+        launcher:className="io.github.runassudo.launchert.gallery3d.app.Gallery"
         launcher:screen="3"
         launcher:x="1"
         launcher:y="3" />
