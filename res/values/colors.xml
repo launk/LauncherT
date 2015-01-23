@@ -38,4 +38,5 @@
     <color name="outline_color">#FFFFFFFF</color>
     <color name="widget_text_panel">#FF374248</color>
 
+    <color name="wallpaper_picker_translucent_gray">#66000000</color>
 </resources>

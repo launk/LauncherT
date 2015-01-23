@@ -67,12 +67,12 @@ public class LauncherBackupAgentHelper extends BackupAgentHelper {
                 getContentResolver(), SETTING_RESTORE_ENABLED, 1);
         if (VERBOSE) Log.v(TAG, "restore is " + (restoreEnabled ? "enabled" : "disabled"));
 
-        addHelper(LauncherBackupHelper.LAUNCHER_PREFS_PREFIX,
-                new LauncherPreferencesBackupHelper(this,
-                        LauncherAppState.getSharedPreferencesKey(),
-                        restoreEnabled));
-        addHelper(LauncherBackupHelper.LAUNCHER_PREFIX,
-                new LauncherBackupHelper(this, restoreEnabled));
+        // addHelper(LauncherBackupHelper.LAUNCHER_PREFS_PREFIX,
+        //         new LauncherPreferencesBackupHelper(this,
+        //                 LauncherAppState.getSharedPreferencesKey(),
+        //                 restoreEnabled));
+        // addHelper(LauncherBackupHelper.LAUNCHER_PREFIX,
+        //         new LauncherBackupHelper(this, restoreEnabled));
     }
 
     @Override
