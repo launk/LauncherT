@@ -44,7 +44,7 @@ public class AppsCustomizeTabHost extends FrameLayout implements LauncherTransit
     private static final String APPS_TAB_TAG = "APPS";
     private static final String WIDGETS_TAB_TAG = "WIDGETS";
 
-    private AppsCustomizePagedView mPagedView;
+    private AppsCustomizeView mPagedView;
     private View mContent;
     private boolean mInTransition = false;
 
@@ -60,11 +60,11 @@ public class AppsCustomizeTabHost extends FrameLayout implements LauncherTransit
      * reflects the new content (but doesn't do the animation and logic associated with changing
      * tabs manually).
      */
-    void setContentTypeImmediate(AppsCustomizePagedView.ContentType type) {
+    void setContentTypeImmediate(AppsCustomizeView.ContentType type) {
         mPagedView.setContentType(type);
     }
 
-    public void setCurrentTabFromContent(AppsCustomizePagedView.ContentType type) {
+    public void setCurrentTabFromContent(AppsCustomizeView.ContentType type) {
         setContentTypeImmediate(type);
     }
 
@@ -84,7 +84,7 @@ public class AppsCustomizeTabHost extends FrameLayout implements LauncherTransit
      */
     @Override
     protected void onFinishInflate() {
-        mPagedView = (AppsCustomizePagedView) findViewById(R.id.apps_customize_pane_content);
+        mPagedView = (AppsCustomizeView) findViewById(R.id.apps_customize_pane_content);
         mContent = findViewById(R.id.content);
     }
 
@@ -95,22 +95,22 @@ public class AppsCustomizeTabHost extends FrameLayout implements LauncherTransit
     /**
      * Returns the content type for the specified tab tag.
      */
-    public AppsCustomizePagedView.ContentType getContentTypeForTabTag(String tag) {
+    public AppsCustomizeView.ContentType getContentTypeForTabTag(String tag) {
         if (tag.equals(APPS_TAB_TAG)) {
-            return AppsCustomizePagedView.ContentType.Applications;
+            return AppsCustomizeView.ContentType.Applications;
         } else if (tag.equals(WIDGETS_TAB_TAG)) {
-            return AppsCustomizePagedView.ContentType.Widgets;
+            return AppsCustomizeView.ContentType.Widgets;
         }
-        return AppsCustomizePagedView.ContentType.Applications;
+        return AppsCustomizeView.ContentType.Applications;
     }
 
     /**
      * Returns the tab tag for a given content type.
      */
-    public String getTabTagForContentType(AppsCustomizePagedView.ContentType type) {
-        if (type == AppsCustomizePagedView.ContentType.Applications) {
+    public String getTabTagForContentType(AppsCustomizeView.ContentType type) {
+        if (type == AppsCustomizeView.ContentType.Applications) {
             return APPS_TAB_TAG;
-        } else if (type == AppsCustomizePagedView.ContentType.Widgets) {
+        } else if (type == AppsCustomizeView.ContentType.Widgets) {
             return WIDGETS_TAB_TAG;
         }
         return APPS_TAB_TAG;
@@ -137,8 +137,8 @@ public class AppsCustomizeTabHost extends FrameLayout implements LauncherTransit
             mContent.setVisibility(VISIBLE);
             // We unload the widget previews when the UI is hidden, so need to reload pages
             // Load the current page synchronously, and the neighboring pages asynchronously
-            mPagedView.loadAssociatedPages(mPagedView.getCurrentPage(), true);
-            mPagedView.loadAssociatedPages(mPagedView.getCurrentPage());
+            mPagedView.loadCurrentPage(true);
+            mPagedView.loadCurrentPage();
         }
     }
 
@@ -151,7 +151,7 @@ public class AppsCustomizeTabHost extends FrameLayout implements LauncherTransit
 
     @Override
     public ViewGroup getContent() {
-        return mPagedView;
+        return (ViewGroup) mPagedView;
     }
 
     public boolean isInTransition() {
@@ -174,7 +174,7 @@ public class AppsCustomizeTabHost extends FrameLayout implements LauncherTransit
             // Make sure the current page is loaded (we start loading the side pages after the
             // transition to prevent slowing down the animation)
             // TODO: revisit this
-            mPagedView.loadAssociatedPages(mPagedView.getCurrentPage());
+            mPagedView.loadCurrentPage();
         }
     }
 
@@ -196,14 +196,15 @@ public class AppsCustomizeTabHost extends FrameLayout implements LauncherTransit
         if (!toWorkspace) {
             // Make sure adjacent pages are loaded (we wait until after the transition to
             // prevent slowing down the animation)
-            mPagedView.loadAssociatedPages(mPagedView.getCurrentPage());
+            mPagedView.loadCurrentPage();
 
             // Opening apps, need to announce what page we are on.
             AccessibilityManager am = (AccessibilityManager)
                     getContext().getSystemService(Context.ACCESSIBILITY_SERVICE);
             if (am.isEnabled()) {
                 // Notify the user when the page changes
-                announceForAccessibility(mPagedView.getCurrentPageDescription());
+                // announceForAccessibility(mPagedView.getCurrentPageDescription());
+            	// TODO: (LauncherT) Re-enable accessibility.
             }
 
             // Going from Workspace -> All Apps

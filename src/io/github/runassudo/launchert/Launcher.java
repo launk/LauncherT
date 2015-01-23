@@ -24,6 +24,7 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -101,7 +102,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import io.github.runassudo.launchert.compat.AppWidgetManagerCompat;
 import io.github.runassudo.launchert.compat.LauncherActivityInfoCompat;
 import io.github.runassudo.launchert.compat.LauncherAppsCompat;
@@ -109,11 +109,9 @@ import io.github.runassudo.launchert.compat.PackageInstallerCompat;
 import io.github.runassudo.launchert.compat.PackageInstallerCompat.PackageInstallInfo;
 import io.github.runassudo.launchert.compat.UserHandleCompat;
 import io.github.runassudo.launchert.compat.UserManagerCompat;
-
 import io.github.runassudo.launchert.R;
 import io.github.runassudo.launchert.DropTarget.DragObject;
 import io.github.runassudo.launchert.PagedView.PageSwitchListener;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -281,7 +279,7 @@ public class Launcher extends Activity
 
     private SearchDropTargetBar mSearchDropTargetBar;
     private AppsCustomizeTabHost mAppsCustomizeTabHost;
-    private AppsCustomizePagedView mAppsCustomizeContent;
+    private AppsCustomizeView mAppsCustomizeContent;
     private boolean mAutoAdvanceRunning = false;
     private View mQsb;
 
@@ -1263,8 +1261,7 @@ public class Launcher extends Activity
             if (curTab != null) {
                 mAppsCustomizeTabHost.setContentTypeImmediate(
                         mAppsCustomizeTabHost.getContentTypeForTabTag(curTab));
-                mAppsCustomizeContent.loadAssociatedPages(
-                        mAppsCustomizeContent.getCurrentPage());
+                mAppsCustomizeContent.loadCurrentPage();
             }
 
             int currentIndex = savedState.getInt("apps_customize_currentIndex");
@@ -1356,7 +1353,7 @@ public class Launcher extends Activity
 
         // Setup AppsCustomize
         mAppsCustomizeTabHost = (AppsCustomizeTabHost) findViewById(R.id.apps_customize_pane);
-        mAppsCustomizeContent = (AppsCustomizePagedView)
+        mAppsCustomizeContent = (AppsCustomizeView)
                 mAppsCustomizeTabHost.findViewById(R.id.apps_customize_pane_content);
         mAppsCustomizeContent.setup(this, dragController);
 
@@ -1980,7 +1977,7 @@ public class Launcher extends Activity
 
         // Save the current AppsCustomize tab
         if (mAppsCustomizeTabHost != null) {
-            AppsCustomizePagedView.ContentType type = mAppsCustomizeContent.getContentType();
+        	AppsCustomizeView.ContentType type = mAppsCustomizeContent.getContentType();
             String currentTabTag = mAppsCustomizeTabHost.getTabTagForContentType(type);
             if (currentTabTag != null) {
                 outState.putString("apps_customize_currentTab", currentTabTag);
@@ -2391,7 +2388,7 @@ public class Launcher extends Activity
     public void onBackPressed() {
         if (isAllAppsVisible()) {
             if (mAppsCustomizeContent.getContentType() ==
-                    AppsCustomizePagedView.ContentType.Applications) {
+            		AppsCustomizeView.ContentType.Applications) {
                 showWorkspace(true);
             } else {
                 showOverviewMode(true);
@@ -2560,7 +2557,7 @@ public class Launcher extends Activity
         if (isAllAppsVisible()) {
             showWorkspace(true);
         } else {
-            showAllApps(true, AppsCustomizePagedView.ContentType.Applications, false);
+            showAllApps(true, AppsCustomizeView.ContentType.Applications, false);
         }
     }
 
@@ -2707,7 +2704,7 @@ public class Launcher extends Activity
      */
     protected void onClickAddWidgetButton(View view) {
         if (LOGD) Log.d(TAG, "onClickAddWidgetButton");
-        showAllApps(true, AppsCustomizePagedView.ContentType.Widgets, true);
+        showAllApps(true, AppsCustomizeView.ContentType.Widgets, true);
     }
 
     /**
@@ -3203,12 +3200,13 @@ public class Launcher extends Activity
      * of the screen.
      */
     private void showAppsCustomizeHelper(final boolean animated, final boolean springLoaded) {
-        AppsCustomizePagedView.ContentType contentType = mAppsCustomizeContent.getContentType();
+    	AppsCustomizeView.ContentType contentType = mAppsCustomizeContent.getContentType();
         showAppsCustomizeHelper(animated, springLoaded, contentType);
     }
 
-    private void showAppsCustomizeHelper(final boolean animated, final boolean springLoaded,
-                                         final AppsCustomizePagedView.ContentType contentType) {
+    @SuppressLint("NewApi")
+	private void showAppsCustomizeHelper(final boolean animated, final boolean springLoaded,
+                                         final AppsCustomizeView.ContentType contentType) {
         if (mStateAnimation != null) {
             mStateAnimation.setDuration(0);
             mStateAnimation.cancel();
@@ -3231,12 +3229,12 @@ public class Launcher extends Activity
 
         final ArrayList<View> layerViews = new ArrayList<View>();
 
-        Workspace.State workspaceState = contentType == AppsCustomizePagedView.ContentType.Widgets ?
+        Workspace.State workspaceState = contentType == AppsCustomizeView.ContentType.Widgets ?
                 Workspace.State.OVERVIEW_HIDDEN : Workspace.State.NORMAL_HIDDEN;
         Animator workspaceAnim =
                 mWorkspace.getChangeStateAnimation(workspaceState, animated, layerViews);
         if (!LauncherAppState.isDisableAllApps()
-                || contentType == AppsCustomizePagedView.ContentType.Widgets) {
+                || contentType == AppsCustomizeView.ContentType.Widgets) {
             // Set the content type for the all apps/widgets space
             mAppsCustomizeTabHost.setContentTypeImmediate(contentType);
         }
@@ -3246,15 +3244,16 @@ public class Launcher extends Activity
 
         if (animated && initialized) {
             mStateAnimation = LauncherAnimUtils.createAnimatorSet();
-            final AppsCustomizePagedView content = (AppsCustomizePagedView)
+            final AppsCustomizeView content = (AppsCustomizeView)
                     toView.findViewById(R.id.apps_customize_pane_content);
 
-            final View page = content.getPageAt(content.getCurrentPage());
+            //TODO: (LauncherT) Abstract.
+            final View page = ((PagedView) content).getPageAt(((PagedView) content).getCurrentPage());
             final View revealView = toView.findViewById(R.id.fake_page);
 
             final float initialPanelAlpha = 1f;
 
-            final boolean isWidgetTray = contentType == AppsCustomizePagedView.ContentType.Widgets;
+            final boolean isWidgetTray = contentType == AppsCustomizeView.ContentType.Widgets;
             if (isWidgetTray) {
                 revealView.setBackground(res.getDrawable(R.drawable.quantum_panel_dark));
             } else {
@@ -3486,15 +3485,17 @@ public class Launcher extends Activity
                 mStateAnimation.play(workspaceAnim);
             }
 
-            final AppsCustomizePagedView content = (AppsCustomizePagedView)
+            final AppsCustomizeView content = (AppsCustomizeView)
                     fromView.findViewById(R.id.apps_customize_pane_content);
+            final PagedView pvContent = (PagedView) content;
 
-            final View page = content.getPageAt(content.getNextPage());
+            //TODO: (LauncherT) Abstract away page things.
+            final View page = pvContent.getPageAt(pvContent.getNextPage());
 
             // We need to hide side pages of the Apps / Widget tray to avoid some ugly edge cases
-            int count = content.getChildCount();
+            int count = ((ViewGroup) content).getChildCount();
             for (int i = 0; i < count; i++) {
-                View child = content.getChildAt(i);
+                View child = ((ViewGroup) content).getChildAt(i);
                 if (child != page) {
                     child.setVisibility(View.INVISIBLE);
                 }
@@ -3505,9 +3506,9 @@ public class Launcher extends Activity
             // don't perform all these no-op animations. In particularly, this was causing
             // the all-apps button to pop in and out.
             if (fromView.getVisibility() == View.VISIBLE) {
-                AppsCustomizePagedView.ContentType contentType = content.getContentType();
+            	AppsCustomizeView.ContentType contentType = content.getContentType();
                 final boolean isWidgetTray =
-                        contentType == AppsCustomizePagedView.ContentType.Widgets;
+                        contentType == AppsCustomizeView.ContentType.Widgets;
 
                 if (isWidgetTray) {
                     revealView.setBackground(res.getDrawable(R.drawable.quantum_panel_dark));
@@ -3627,7 +3628,8 @@ public class Launcher extends Activity
 
                 dispatchOnLauncherTransitionPrepare(fromView, animated, true);
                 dispatchOnLauncherTransitionPrepare(toView, animated, true);
-                mAppsCustomizeContent.stopScrolling();
+                ((PagedView) mAppsCustomizeContent).stopScrolling();
+                //TODO: (LauncherT) Abstract.
             }
 
             mStateAnimation.addListener(new AnimatorListenerAdapter() {
@@ -3646,9 +3648,9 @@ public class Launcher extends Activity
                     }
                     content.setPageBackgroundsVisible(true);
                     // Unhide side pages
-                    int count = content.getChildCount();
+                    int count = ((ViewGroup) content).getChildCount();
                     for (int i = 0; i < count; i++) {
-                        View child = content.getChildAt(i);
+                        View child = ((ViewGroup) content).getChildAt(i);
                         child.setVisibility(View.VISIBLE);
                     }
 
@@ -3658,9 +3660,10 @@ public class Launcher extends Activity
                         page.setTranslationY(0);
                         page.setAlpha(1);
                     }
-                    content.setCurrentPage(content.getNextPage());
+                    pvContent.setCurrentPage(pvContent.getNextPage());
 
-                    mAppsCustomizeContent.updateCurrentPageScroll();
+                    ((PagedView) mAppsCustomizeContent).updateCurrentPageScroll();
+                    //TODO: (LauncherT) Abstract.
                 }
             });
 
@@ -3759,7 +3762,7 @@ public class Launcher extends Activity
     public void onWorkspaceShown(boolean animated) {
     }
 
-    void showAllApps(boolean animated, AppsCustomizePagedView.ContentType contentType,
+    void showAllApps(boolean animated, AppsCustomizeView.ContentType contentType,
                      boolean resetPageToZero) {
         if (mState != State.WORKSPACE) return;
 
@@ -4479,7 +4482,7 @@ public class Launcher extends Activity
             pendingInfo.minSpanX = item.minSpanX;
             pendingInfo.minSpanY = item.minSpanY;
             Bundle options =
-                    AppsCustomizePagedView.getDefaultOptionsForWidget(this, pendingInfo);
+                    AppsCustomizeViewDefaults.getDefaultOptionsForWidget(this, pendingInfo);
 
             int newWidgetId = mAppWidgetHost.allocateAppWidgetId();
             boolean success = mAppWidgetManager.bindAppWidgetIdIfAllowed(
