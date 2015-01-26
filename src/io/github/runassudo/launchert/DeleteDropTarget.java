@@ -104,7 +104,7 @@ public class DeleteDropTarget extends ButtonDropTarget {
         return source.supportsAppInfoDropTarget() && (info instanceof AppInfo);
     }
     private boolean isAllAppsWidget(DragSource source, Object info) {
-        if (source instanceof AppsCustomizeView) {
+        if (source instanceof AppsCustomizePagedView) {
             if (info instanceof PendingAddItemInfo) {
                 PendingAddItemInfo addInfo = (PendingAddItemInfo) info;
                 switch (addInfo.itemType) {
@@ -490,7 +490,7 @@ public class DeleteDropTarget extends ButtonDropTarget {
     }
 
     public void onFlingToDelete(final DragObject d, int x, int y, PointF vel) {
-        final boolean isAllApps = d.dragSource instanceof AppsCustomizeView;
+        final boolean isAllApps = d.dragSource instanceof AppsCustomizePagedView;
 
         // Don't highlight the icon as it's animating
         d.dragView.setColor(0);

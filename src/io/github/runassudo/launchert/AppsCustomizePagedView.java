@@ -46,8 +46,9 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import io.github.runassudo.launchert.compat.AppWidgetManagerCompat;
-import io.github.runassudo.launchert.AppsCustomizeView.ContentType;
+
 import io.github.runassudo.launchert.R;
 import io.github.runassudo.launchert.DropTarget.DragObject;
 
@@ -142,13 +143,20 @@ class AppsCustomizeAsyncTask extends AsyncTask<AsyncTaskPageData, Void, AsyncTas
 /**
  * The Apps/Customize page that displays all the applications, widgets, and shortcuts.
  */
-public class AppsCustomizePagedView extends PagedViewWithDraggableItems implements AppsCustomizeView,
+public class AppsCustomizePagedView extends PagedViewWithDraggableItems implements
         View.OnClickListener, View.OnKeyListener, DragSource,
         PagedViewWidget.ShortPressListener, LauncherTransitionable {
     static final String TAG = "AppsCustomizePagedView";
 
     private static Rect sTmpRect = new Rect();
 
+    /**
+     * The different content types that this paged view can show.
+     */
+    public enum ContentType {
+        Applications,
+        Widgets
+    }
     private ContentType mContentType = ContentType.Applications;
 
     // Refs
@@ -255,7 +263,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         mAllAppsPadding.set(r);
     }
 
-    public void setWidgetsPageIndicatorPadding(int pageIndicatorHeight) {
+    void setWidgetsPageIndicatorPadding(int pageIndicatorHeight) {
         setPadding(getPaddingLeft(), getPaddingTop(), getPaddingRight(), pageIndicatorHeight);
     }
 
@@ -297,7 +305,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
     }
 
     /** Get the index of the item to restore to if we need to restore the current page. */
-    public int getSaveInstanceStateIndex() {
+    int getSaveInstanceStateIndex() {
         if (mSaveInstanceStateItemIndex == -1) {
             mSaveInstanceStateItemIndex = getMiddleComponentIndexOnCurrentPage();
         }
@@ -319,7 +327,7 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
     }
 
     /** Restores the page for an item at the specified index */
-    public void restorePageForIndex(int index) {
+    void restorePageForIndex(int index) {
         if (index < 0) return;
         mSaveInstanceStateItemIndex = index;
     }
@@ -476,9 +484,33 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
         mLauncher.getWorkspace().beginDragShared(v, this);
     }
 
+    static Bundle getDefaultOptionsForWidget(Launcher launcher, PendingAddWidgetInfo info) {
+        Bundle options = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            AppWidgetResizeFrame.getWidgetSizeRanges(launcher, info.spanX, info.spanY, sTmpRect);
+            Rect padding = AppWidgetHostView.getDefaultPaddingForWidget(launcher,
+                    info.componentName, null);
+
+            float density = launcher.getResources().getDisplayMetrics().density;
+            int xPaddingDips = (int) ((padding.left + padding.right) / density);
+            int yPaddingDips = (int) ((padding.top + padding.bottom) / density);
+
+            options = new Bundle();
+            options.putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH,
+                    sTmpRect.left - xPaddingDips);
+            options.putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT,
+                    sTmpRect.top - yPaddingDips);
+            options.putInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH,
+                    sTmpRect.right - xPaddingDips);
+            options.putInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT,
+                    sTmpRect.bottom - yPaddingDips);
+        }
+        return options;
+    }
+
     private void preloadWidget(final PendingAddWidgetInfo info) {
         final AppWidgetProviderInfo pInfo = info.info;
-        final Bundle options = AppsCustomizeViewDefaults.getDefaultOptionsForWidget(mLauncher, info);
+        final Bundle options = getDefaultOptionsForWidget(mLauncher, info);
 
         if (pInfo.configure != null) {
             info.bindOptions = options;
@@ -1531,14 +1563,4 @@ public class AppsCustomizePagedView extends PagedViewWithDraggableItems implemen
 
         return String.format(getContext().getString(stringId), page + 1, count);
     }
-
-	@Override
-	public void loadCurrentPage() {
-		loadCurrentPage(false);
-	}
-
-	@Override
-	public void loadCurrentPage(boolean immediateAndOnly) {
-		loadAssociatedPages(getCurrentPage(), immediateAndOnly);
-	}
 }

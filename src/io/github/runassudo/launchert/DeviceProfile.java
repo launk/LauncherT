@@ -827,7 +827,7 @@ public class DeviceProfile {
                 pageIndicator.setLayoutParams(lllp);
             }
 
-            AppsCustomizeView pagedView = (AppsCustomizeView)
+            AppsCustomizePagedView pagedView = (AppsCustomizePagedView)
                     host.findViewById(R.id.apps_customize_pane_content);
 
             FrameLayout fakePageContainer = (FrameLayout)
@@ -864,7 +864,7 @@ public class DeviceProfile {
                 padding.left += pagedFixedViewPadding;
                 padding.right += pagedFixedViewPadding;
 
-                ((ViewGroup) pagedView).setPadding(padding.left, padding.top, padding.right, padding.bottom);
+                pagedView.setPadding(padding.left, padding.top, padding.right, padding.bottom);
                 fakePageContainer.setPadding(padding.left, padding.top, padding.right, padding.bottom);
 
             }
