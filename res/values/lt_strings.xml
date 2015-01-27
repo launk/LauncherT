@@ -20,7 +20,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Desktop Grid Mode -->
     <string name="desktop_grid_mode">Desktop Grid Mode</string>
-    <string name="desktop_grid_mode_summary">Method to use when determining the desktop grid size.</string>
+    <string name="desktop_grid_mode_summary">Method to use when determining the desktop grid size. Changing these settings requires a restart.</string>
     <string-array name="desktop_grid_mode_entries">
         <item>Default</item>
         <item>Custom</item>

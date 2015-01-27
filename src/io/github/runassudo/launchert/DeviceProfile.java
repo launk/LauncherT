@@ -19,6 +19,7 @@ package io.github.runassudo.launchert;
 import android.appwidget.AppWidgetHostView;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Paint;
@@ -26,6 +27,7 @@ import android.graphics.Paint.FontMetrics;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
+import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Gravity;
@@ -37,6 +39,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import io.github.runassudo.launchert.R;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -208,8 +211,11 @@ public class DeviceProfile {
         // Snap to the closest column count
         numColumns = closestProfile.numColumns;
         
-        //(LauncherT) Custom grid size
-        numColumns = 5;
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        if (sharedPref.getString("desktop_grid_mode", "default").equals("custom")) {
+        	numRows = Float.parseFloat(sharedPref.getString("desktop_grid_custom_height", "5"));
+        	numColumns = Float.parseFloat(sharedPref.getString("desktop_grid_custom_width", "5"));
+        }
 
         // Snap to the closest hotseat size
         numHotseatIcons = closestProfile.numHotseatIcons;
