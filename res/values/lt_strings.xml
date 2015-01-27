@@ -18,9 +18,14 @@
 -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="restart_application">Restart LauncherT</string>
+    <string name="restart_application_summary">Changes made to the settings below require restarting LauncherT to take effect.</string>
+    
+    <string name="desktop_settings">Desktop Settings</string>
+    
     <!-- Desktop Grid Mode -->
     <string name="desktop_grid_mode">Desktop Grid Mode</string>
-    <string name="desktop_grid_mode_summary">Method to use when determining the desktop grid size. Changing these settings requires a restart.</string>
+    <string name="desktop_grid_mode_summary">Method to use when determining the desktop grid size.</string>
     <string-array name="desktop_grid_mode_entries">
         <item>Default</item>
         <item>Custom</item>

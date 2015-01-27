@@ -99,9 +99,8 @@
             </intent-filter>
         </activity>
         
-        <activity
-            android:name="io.github.runassudo.launchert.SettingsActivity">
-        </activity>
+        <activity android:name="io.github.runassudo.launchert.SettingsActivity" />
+        <activity android:name="io.github.runassudo.launchert.RestartActivity" />
 
         <activity
             android:name="io.github.runassudo.launchert.ToggleWeightWatcher"
