@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:key="desktop_grid_mode"
+        android:title="@string/desktop_grid_mode"
+        android:summary="@string/desktop_grid_mode_summary"
+        android:entries="@array/desktop_grid_mode_entries"
+        android:entryValues="@array/desktop_grid_mode_values"
+        android:defaultValue="@string/desktop_grid_mode_default" />
+    <EditTextPreference 
+        android:key="desktop_grid_custom_width"
+        android:title="@string/desktop_grid_custom_width"
+        android:summary="@string/desktop_grid_custom_width_summary"
+        android:inputType="number"
+        android:defaultValue="@string/desktop_grid_custom_width_default" />
+    <EditTextPreference 
+        android:key="desktop_grid_custom_height"
+        android:title="@string/desktop_grid_custom_height"
+        android:summary="@string/desktop_grid_custom_height_summary"
+        android:inputType="number"
+        android:defaultValue="@string/desktop_grid_custom_height_default" />
+</PreferenceScreen>

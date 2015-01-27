@@ -445,7 +445,7 @@ public class Launcher extends Activity implements View.OnClickListener,
 		display.getRealSize(realSize);
 		DisplayMetrics dm = new DisplayMetrics();
 		display.getMetrics(dm);
-
+		
 		// Lazy-initialize the dynamic grid
 		DeviceProfile grid =
 				app.initDynamicGrid(this,
@@ -2946,6 +2946,10 @@ public class Launcher extends Activity implements View.OnClickListener,
 	protected void onClickSettingsButton(View v) {
 		if (LOGD)
 			Log.d(TAG, "onClickSettingsButton");
+		
+		//(LauncherT)
+		Intent intent = new Intent(this, SettingsActivity.class);
+		startActivity(intent);
 	}
 
 	public void onTouchDownAllAppsButton(View v) {

@@ -207,6 +207,9 @@ public class DeviceProfile {
 
         // Snap to the closest column count
         numColumns = closestProfile.numColumns;
+        
+        //(LauncherT) Custom grid size
+        numColumns = 5;
 
         // Snap to the closest hotseat size
         numHotseatIcons = closestProfile.numHotseatIcons;
