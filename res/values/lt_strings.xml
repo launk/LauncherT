@@ -46,6 +46,6 @@
     
     <!-- Desktop Default Screen -->
     <string name="desktop_default_screen">Default Screen</string>
-    <string name="desktop_default_screen_summary">The default screen to go to when pressing the Home button. (1 = first screen)</string>
-    <string name="desktop_default_screen_default">1</string>
+    <string name="desktop_default_screen_summary">The default screen to go to when pressing the Home button. (0 = leftmost screen)</string>
+    <string name="desktop_default_screen_default">0</string>
 </resources>

@@ -343,7 +343,7 @@ public class Workspace extends SmoothPagedView
         //(LauncherT) Custom default page.
         // mOriginalDefaultPage = mDefaultPage = a.getInt(R.styleable.Workspace_defaultScreen, 1);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        mOriginalDefaultPage = mDefaultPage = Integer.parseInt(sharedPref.getString("desktop_default_screen", "1"));
+        mOriginalDefaultPage = mDefaultPage = Integer.parseInt(sharedPref.getString("desktop_default_screen", "0"));
         a.recycle();
 
         setOnHierarchyChangeListener(this);
