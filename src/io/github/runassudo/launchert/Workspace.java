@@ -51,6 +51,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -64,11 +65,9 @@ import android.view.accessibility.AccessibilityManager;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.TextView;
-
 import io.github.runassudo.launchert.compat.PackageInstallerCompat;
 import io.github.runassudo.launchert.compat.PackageInstallerCompat.PackageInstallInfo;
 import io.github.runassudo.launchert.compat.UserHandleCompat;
-
 import io.github.runassudo.launchert.R;
 import io.github.runassudo.launchert.FolderIcon.FolderRingAnimator;
 import io.github.runassudo.launchert.Launcher.CustomContentCallbacks;
@@ -340,7 +339,11 @@ public class Workspace extends SmoothPagedView
             res.getInteger(R.integer.config_workspaceSpringLoadShrinkPercentage) / 100.0f;
         mOverviewModeShrinkFactor = grid.getOverviewModeScale();
         mCameraDistance = res.getInteger(R.integer.config_cameraDistance);
-        mOriginalDefaultPage = mDefaultPage = a.getInt(R.styleable.Workspace_defaultScreen, 1);
+        
+        //(LauncherT) Custom default page.
+        // mOriginalDefaultPage = mDefaultPage = a.getInt(R.styleable.Workspace_defaultScreen, 1);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        mOriginalDefaultPage = mDefaultPage = Integer.parseInt(sharedPref.getString("desktop_default_screen", "1"));
         a.recycle();
 
         setOnHierarchyChangeListener(this);

@@ -27,5 +27,11 @@
 			android:summary="@string/desktop_grid_custom_height_summary"
 			android:inputType="number"
 			android:defaultValue="@string/desktop_grid_custom_height_default" />
+		<EditTextPreference 
+			android:key="desktop_default_screen"
+			android:title="@string/desktop_default_screen"
+			android:summary="@string/desktop_default_screen_summary"
+			android:inputType="number"
+			android:defaultValue="@string/desktop_default_screen_default" />
 	</PreferenceCategory>
 </PreferenceScreen>

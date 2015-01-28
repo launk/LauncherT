@@ -205,7 +205,7 @@ public class FocusHelper {
                 break;
             case KeyEvent.KEYCODE_MOVE_HOME:
                 if (handleKeyEvent) {
-                    // Select the first item on this page
+                	// Select the first item on this page
                     child = parent.getChildAt(0);
                     if (child != null) child.requestFocus();
                 }

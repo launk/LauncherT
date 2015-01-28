@@ -43,4 +43,9 @@
     <string name="desktop_grid_custom_height">Desktop Grid Custom Height</string>
     <string name="desktop_grid_custom_height_summary">Desktop Grid Mode must be Custom for this to take effect.</string>
     <string name="desktop_grid_custom_height_default">5</string>
+    
+    <!-- Desktop Default Screen -->
+    <string name="desktop_default_screen">Default Screen</string>
+    <string name="desktop_default_screen_summary">The default screen to go to when pressing the Home button. (1 = first screen)</string>
+    <string name="desktop_default_screen_default">1</string>
 </resources>
