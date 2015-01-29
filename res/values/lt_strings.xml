@@ -34,20 +34,16 @@
         <item>default</item>
         <item>custom</item>
     </string-array>
-    <string name="desktop_grid_mode_default">default</string>
     
     <!-- Desktop Grid Custom Width/Height -->
     <string name="desktop_grid_custom_width">Desktop Grid Custom Width</string>
     <string name="desktop_grid_custom_width_summary">Desktop Grid Mode must be Custom for this to take effect.</string>
-    <string name="desktop_grid_custom_width_default">5</string>
     <string name="desktop_grid_custom_height">Desktop Grid Custom Height</string>
     <string name="desktop_grid_custom_height_summary">Desktop Grid Mode must be Custom for this to take effect.</string>
-    <string name="desktop_grid_custom_height_default">5</string>
     
     <!-- Desktop Default Screen -->
     <string name="desktop_default_screen">Default Screen</string>
     <string name="desktop_default_screen_summary">The default screen to go to when pressing the Home button. (0 = leftmost screen)</string>
-    <string name="desktop_default_screen_default">0</string>
     
     <!-- Desktop Show Searchbar -->
     <string name="desktop_show_searchbar">Show Searchbar</string>
