@@ -33,5 +33,10 @@
 			android:summary="@string/desktop_default_screen_summary"
 			android:inputType="number"
 			android:defaultValue="@string/desktop_default_screen_default" />
+		<CheckBoxPreference 
+			android:key="desktop_show_searchbar"
+			android:title="@string/desktop_show_searchbar"
+			android:summary="@string/desktop_show_searchbar_summary"
+			android:defaultValue="true" />
 	</PreferenceCategory>
 </PreferenceScreen>

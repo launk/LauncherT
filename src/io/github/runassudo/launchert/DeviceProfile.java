@@ -132,7 +132,7 @@ public class DeviceProfile {
 	int allAppsButtonVisualSize;
 
 	//(LauncherT) Search bar visibility
-	boolean searchBarVisible = false;
+	boolean searchBarVisible;
 
 	float dragViewScale;
 
@@ -277,7 +277,7 @@ public class DeviceProfile {
 		computeAllAppsButtonSize(context);
 
 		//(LauncherT) Search bar
-		//TODO: (LauncherT) Get search bar visibility
+		searchBarVisible = sharedPref.getBoolean("desktop_show_searchbar", true);
 		searchBarSpaceHeightPx =
 				2
 						* edgeMarginPx

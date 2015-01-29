@@ -48,4 +48,8 @@
     <string name="desktop_default_screen">Default Screen</string>
     <string name="desktop_default_screen_summary">The default screen to go to when pressing the Home button. (0 = leftmost screen)</string>
     <string name="desktop_default_screen_default">0</string>
+    
+    <!-- Desktop Show Searchbar -->
+    <string name="desktop_show_searchbar">Show Searchbar</string>
+    <string name="desktop_show_searchbar_summary">Shows or hides the Google search bar at the top of each page.</string>
 </resources>
