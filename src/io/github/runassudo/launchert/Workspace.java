@@ -2285,6 +2285,10 @@ public class Workspace extends SmoothPagedView implements DropTarget,
 	}
 
 	boolean shouldVoiceButtonProxyBeVisible() {
+		//(LauncherT) Custom search bar visibility
+		if (!SettingsData.desktopShowSearchbar)
+			return false;
+		
 		if (isOnOrMovingToCustomContent()) {
 			return false;
 		}
