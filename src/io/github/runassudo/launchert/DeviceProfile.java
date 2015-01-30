@@ -131,9 +131,6 @@ public class DeviceProfile {
 	int pageIndicatorHeightPx;
 	int allAppsButtonVisualSize;
 
-	//(LauncherT) Search bar visibility
-	boolean searchBarVisible;
-
 	float dragViewScale;
 
 	int allAppsShortEdgeCount = -1;
@@ -216,16 +213,9 @@ public class DeviceProfile {
 		// Snap to the closest column count
 		numColumns = closestProfile.numColumns;
 
-		SharedPreferences sharedPref =
-				PreferenceManager.getDefaultSharedPreferences(context);
-		if (sharedPref.getString("desktop_grid_mode", "default").equals(
-				"custom")) {
-			numRows =
-					Float.parseFloat(sharedPref.getString(
-							"desktop_grid_custom_height", "5"));
-			numColumns =
-					Float.parseFloat(sharedPref.getString(
-							"desktop_grid_custom_width", "5"));
+		if (SettingsData.desktopGridMode.equals("custom")) {
+			numRows = SettingsData.desktopGridCustomHeight;
+			numColumns = SettingsData.desktopGridCustomWidth;
 		}
 
 		// Snap to the closest hotseat size
@@ -277,11 +267,10 @@ public class DeviceProfile {
 		computeAllAppsButtonSize(context);
 
 		//(LauncherT) Search bar
-		searchBarVisible = sharedPref.getBoolean("desktop_show_searchbar", true);
 		searchBarSpaceHeightPx =
 				2
 						* edgeMarginPx
-						+ (searchBarVisible ? searchBarHeightPx
+						+ (SettingsData.desktopShowSearchbar ? searchBarHeightPx
 								: 3 * edgeMarginPx);
 	}
 
@@ -591,9 +580,9 @@ public class DeviceProfile {
 	/** Returns the search bar top offset */
 	int getSearchBarTopOffset() {
 		if (isTablet() && !isVerticalBarLayout()) {
-			return searchBarVisible ? 4 * edgeMarginPx : 0;
+			return SettingsData.desktopShowSearchbar ? 4 * edgeMarginPx : 0;
 		} else {
-			return searchBarVisible ? 2 * edgeMarginPx : 0;
+			return SettingsData.desktopShowSearchbar ? 2 * edgeMarginPx : 0;
 		}
 	}
 
@@ -628,9 +617,11 @@ public class DeviceProfile {
 				//      that into account here too.
 				int gap =
 						(int) ((width - 2 * edgeMarginPx - (numColumns * cellWidthPx)) / (2 * (numColumns + 1)));
-				bounds.set(edgeMarginPx + gap, getSearchBarTopOffset(),
+				bounds.set(
+						edgeMarginPx + gap,
+						getSearchBarTopOffset(),
 						availableWidthPx - (edgeMarginPx + gap),
-						searchBarVisible ? searchBarSpaceHeightPx
+						SettingsData.desktopShowSearchbar ? searchBarSpaceHeightPx
 								: edgeMarginPx);
 			} else {
 				bounds.set(
@@ -639,7 +630,7 @@ public class DeviceProfile {
 						getSearchBarTopOffset(),
 						availableWidthPx
 								- (desiredWorkspaceLeftRightMarginPx - defaultWidgetPadding.right),
-						searchBarVisible ? searchBarSpaceHeightPx
+						SettingsData.desktopShowSearchbar ? searchBarSpaceHeightPx
 								: edgeMarginPx);
 			}
 		}
@@ -843,7 +834,7 @@ public class DeviceProfile {
 
 		//(LauncherT) Layout the search bar
 		View qsbBar = launcher.getQsbBar();
-		if (!searchBarVisible)
+		if (!SettingsData.desktopShowSearchbar)
 			qsbBar.setVisibility(View.GONE);
 
 		// Layout the voice proxy

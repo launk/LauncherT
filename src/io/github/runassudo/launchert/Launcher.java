@@ -421,6 +421,9 @@ public class Launcher extends Activity implements View.OnClickListener,
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		//(LauncherT) Load settings
+		SettingsData.loadSettings(getApplicationContext());
+
 		if (DEBUG_STRICT_MODE) {
 			StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
 					.detectDiskReads().detectDiskWrites().detectNetwork() // or .detectAll() for all detectable problems
