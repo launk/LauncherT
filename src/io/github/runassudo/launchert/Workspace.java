@@ -2547,7 +2547,11 @@ public class Workspace extends SmoothPagedView implements DropTarget,
 
 			anim.play(overviewPanelAlpha);
 			anim.play(hotseatAlpha);
-			anim.play(searchBarAlpha);
+
+			//(LauncherT) Custom search bar visibility
+			if (SettingsData.desktopShowSearchbar)
+				anim.play(searchBarAlpha);
+
 			anim.play(pageIndicatorAlpha);
 			anim.setStartDelay(delay);
 		} else {
@@ -2559,8 +2563,13 @@ public class Workspace extends SmoothPagedView implements DropTarget,
 				pageIndicator.setAlpha(finalHotseatAndPageIndicatorAlpha);
 				AlphaUpdateListener.updateVisibility(pageIndicator);
 			}
-			searchBar.setAlpha(finalSearchBarAlpha);
-			AlphaUpdateListener.updateVisibility(searchBar);
+
+			//(LauncherT) Custom search bar visibility
+			if (SettingsData.desktopShowSearchbar) {
+				searchBar.setAlpha(finalSearchBarAlpha);
+				AlphaUpdateListener.updateVisibility(searchBar);
+			}
+
 			updateCustomContentVisibility();
 			setScaleX(mNewScale);
 			setScaleY(mNewScale);
